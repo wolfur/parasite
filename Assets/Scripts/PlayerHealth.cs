@@ -22,6 +22,9 @@ public class PlayerHealth : MonoBehaviour
     Vector2 lastActiveVelocity;
     Rigidbody2D rigidbody;
 
+    public GameObject splash;
+    private bool isDead = false;
+
 	void Awake ()
 	{
 		// Setting up references.
@@ -47,15 +50,24 @@ public class PlayerHealth : MonoBehaviour
         if (decay)
             health -= Time.deltaTime * decayRate;
 
-        if (health <= 0)
+        if (health <= 0 && !isDead)
         {
             anim.SetTrigger("Die");
             var host = GetComponent<IHost>();
+
+
             if (host != null)
             {
                 host.parasite.ReleaseControl(host, transform.position, lastActiveVelocity.normalized, host.launchForce);
                 Destroy(gameObject);
             }
+            else
+            {
+                Instantiate(splash, transform.position, transform.rotation);
+            }
+
+
+            isDead = true;
         }
         health = Mathf.Max(health, 0f);
         UpdateHealthBar();
@@ -101,6 +113,7 @@ public class PlayerHealth : MonoBehaviour
 
 					// ... Trigger the 'Die' animation state
 					anim.SetTrigger("Die");
+
 				}
 			}
 		}
