@@ -22,7 +22,6 @@ GameObject:
   - component: {fileID: 50931024972100384}
   - component: {fileID: 114504621339474214}
   - component: {fileID: 61268653441553344}
-  - component: {fileID: 58547844800293148}
   - component: {fileID: 95991994030087114}
   - component: {fileID: 114688899678681130}
   - component: {fileID: 82021913635584530}
@@ -126,21 +125,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!58 &58547844800293148
-CircleCollider2D:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1015983831011696}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 6200000, guid: 24ac79603fb61400588e37d9f6fe952a, type: 2}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -0.45}
-  serializedVersion: 2
-  m_Radius: 0.37
 --- !u!61 &61268653441553344
 BoxCollider2D:
   m_ObjectHideFlags: 1
@@ -376,7 +360,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52121b47a452546fb88cf2e9a9352f56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 100
+  health: 200
   decay: 1
   decayRate: 33
   repeatDamagePeriod: 0.35
