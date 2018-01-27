@@ -4,6 +4,8 @@ using System.Collections;
 public class PlayerHealth : MonoBehaviour
 {	
 	public float health = 100f;					// The player's health.
+    public bool decay;
+    public float decayRate = 33f;               // health / sec
 	public float repeatDamagePeriod = 2f;		// How frequently the player can be damaged.
 	public AudioClip[] ouchClips;				// Array of clips to play when the player is damaged.
 	public float hurtForce = 10f;				// The force with which the player is pushed when hurt.
@@ -27,6 +29,24 @@ public class PlayerHealth : MonoBehaviour
 		healthScale = healthBar.transform.localScale;
 	}
 
+    void Update()
+    {
+        if (decay)
+            health -= Time.deltaTime * decayRate;
+
+        if (health <= 0)
+        {
+            anim.SetTrigger("Die");
+            var host = GetComponent<IHost>();
+            if (host != null)
+            {
+                host.parasite.ReleaseControl(host, transform.position);
+                Destroy(gameObject);
+            }
+        }
+        health = Mathf.Max(health, 0f);
+        UpdateHealthBar();
+    }
 
 	void OnCollisionEnter2D (Collision2D col)
 	{

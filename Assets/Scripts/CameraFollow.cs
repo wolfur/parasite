@@ -11,14 +11,7 @@ public class CameraFollow : MonoBehaviour
 	public Vector2 minXAndY;		// The minimum x and y coordinates the camera can have.
 
 
-	private Transform player;		// Reference to the player's transform.
-
-
-	void Awake ()
-	{
-		// Setting up the reference.
-		player = GameObject.FindGameObjectWithTag("Player").transform;
-	}
+	public Transform player;		// Reference to the player's transform.
 
 
 	bool CheckXMargin()
@@ -43,6 +36,9 @@ public class CameraFollow : MonoBehaviour
 	
 	void TrackPlayer ()
 	{
+	    if (!player)
+	        return;
+
 		// By default the target x and y coordinates of the camera are it's current x and y coordinates.
 		float targetX = transform.position.x;
 		float targetY = transform.position.y;
