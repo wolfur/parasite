@@ -26,6 +26,9 @@ public class ParasiteControl : MonoBehaviour
     CameraFollow cameraFollow;
     Rigidbody2D rigidbody;
 
+    Collider2D collider1;
+    Collider2D collider2;
+
 	void Awake()
 	{
 		// Setting up references.
@@ -86,6 +89,12 @@ public class ParasiteControl : MonoBehaviour
 
         transform.position = releasePoint;
         gameObject.SetActive(true);
+        collider1 = this.GetComponent<Collider2D>();
+        collider2 = go.GetComponent<Collider2D>();
+        Physics2D.IgnoreCollision(collider1,collider2 );
+        Invoke("ReenableColliders", .25f);
+        
+
         if (launchDirection.HasValue)
         {
             var finalLaunchDirection = launchDirection.Value;
@@ -94,8 +103,12 @@ public class ParasiteControl : MonoBehaviour
                 finalLaunchDirection += Vector2.up;
                 finalLaunchDirection.Normalize();
             }
+
+
             rigidbody.AddForce(finalLaunchDirection * launchForce);
         }
+
+
         var parasiteHealth = GetComponent<PlayerHealth>();
         parasiteHealth.enabled = true;
     }
@@ -195,4 +208,9 @@ public class ParasiteControl : MonoBehaviour
 			// Otherwise return this index.
 			return i;
 	}
+
+    private void ReenableColliders()
+    {
+        Physics2D.IgnoreCollision(collider1, collider2, false);
+    }
 }

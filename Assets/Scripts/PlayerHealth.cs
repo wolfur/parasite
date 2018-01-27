@@ -18,12 +18,13 @@ public class PlayerHealth : MonoBehaviour
 	private float lastHitTime;					// The time at which the player was last hit.
 	private Vector3 healthScale;				// The local scale of the health bar initially (with full health).
 	private PlayerControl playerControl;		// Reference to the PlayerControl script.
-	private Animator anim;						// Reference to the Animator on the player
+	private Animator anim;	                    // Reference to the Animator on the player
+
     Vector2 lastActiveVelocity;
     Rigidbody2D rigidbody;
 
     public GameObject splash;
-    private bool isDead = false;
+    public bool isDead = false;
 
 	void Awake ()
 	{
@@ -68,6 +69,7 @@ public class PlayerHealth : MonoBehaviour
 
 
             isDead = true;
+            Debug.Log("END");
         }
         health = Mathf.Max(health, 0f);
         UpdateHealthBar();
