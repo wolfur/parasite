@@ -19,17 +19,20 @@ public class ParasiteControl : MonoBehaviour
 
 
 	private int tauntIndex;					// The index of the taunts array indicating the most recent taunt.
-	private Transform groundCheck;			// A position marking where to check if the player is grounded.
+	//private Transform groundCheck;			// A position marking where to check if the player is grounded.
 	private bool grounded = false;			// Whether or not the player is grounded.
 	private Animator anim;					// Reference to the player's animator component.
     FollowPlayer healthFollowPlayer;
     CameraFollow cameraFollow;
     Rigidbody2D rigidbody;
 
+    Collider2D collider1;
+    Collider2D collider2;
+
 	void Awake()
 	{
 		// Setting up references.
-		groundCheck = transform.Find("groundCheck");
+		//groundCheck = transform.Find("groundCheck");
 		anim = GetComponent<Animator>();
         healthFollowPlayer = GameObject.FindObjectOfType<FollowPlayer>();
 	    cameraFollow = FindObjectOfType<CameraFollow>();
@@ -42,7 +45,7 @@ public class ParasiteControl : MonoBehaviour
 	    healthFollowPlayer.player = transform;
 
 		// The player is grounded if a linecast to the groundcheck position hits anything on the ground layer.
-		grounded = Physics2D.Linecast(transform.position, groundCheck.position, 1 << LayerMask.NameToLayer("Ground"));  
+		//grounded = Physics2D.Linecast(transform.position, groundCheck.position, 1 << LayerMask.NameToLayer("Ground"));  
 
         //Once the parasite hits the ground the decay starts
         if (this.GetComponent<PlayerHealth>().decay == false && grounded)
@@ -74,6 +77,16 @@ public class ParasiteControl : MonoBehaviour
         }
     }
 
+    void OnTriggerStay2D(Collider2D other)
+    {
+        grounded = true;
+    }
+
+    void OnTriggerExit2D(Collider2D other)
+    {
+        grounded = false;
+    }
+
     public void ReleaseControl(IHost host, Vector3 releasePoint, Vector2? launchDirection = null, float launchForce = 0f)
     {
         var hostControl = ((MonoBehaviour)host);
@@ -86,6 +99,12 @@ public class ParasiteControl : MonoBehaviour
 
         transform.position = releasePoint;
         gameObject.SetActive(true);
+        collider1 = this.GetComponent<Collider2D>();
+        collider2 = go.GetComponent<Collider2D>();
+        Physics2D.IgnoreCollision(collider1,collider2 );
+        Invoke("ReenableColliders", .25f);
+        
+
         if (launchDirection.HasValue)
         {
             var finalLaunchDirection = launchDirection.Value;
@@ -94,8 +113,12 @@ public class ParasiteControl : MonoBehaviour
                 finalLaunchDirection += Vector2.up;
                 finalLaunchDirection.Normalize();
             }
+
+
             rigidbody.AddForce(finalLaunchDirection * launchForce);
         }
+
+
         var parasiteHealth = GetComponent<PlayerHealth>();
         parasiteHealth.enabled = true;
     }
@@ -195,4 +218,9 @@ public class ParasiteControl : MonoBehaviour
 			// Otherwise return this index.
 			return i;
 	}
+
+    private void ReenableColliders()
+    {
+        Physics2D.IgnoreCollision(collider1, collider2, false);
+    }
 }

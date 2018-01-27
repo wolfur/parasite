@@ -19,11 +19,15 @@ public class MouseControl : MonoBehaviour, IHost
 
 
 	private int tauntIndex;					// The index of the taunts array indicating the most recent taunt.
-	private Transform groundCheck;			// A position marking where to check if the player is grounded.
+	// private Transform groundCheck;			// A position marking where to check if the player is grounded.
 	private bool grounded = false;			// Whether or not the player is grounded.
 	private Animator anim;					// Reference to the player's animator component.
 
     public ParasiteControl parasite { get; set; }
+
+    //ZZZZZZZZ
+    Vector2 lastActiveVelocity;
+    Rigidbody2D rigidbody;
 
     public float launchForce { get { return m_LaunchForce; } }
     [SerializeField]
@@ -32,20 +36,31 @@ public class MouseControl : MonoBehaviour, IHost
     void Awake()
 	{
 		// Setting up references.
-		groundCheck = transform.Find("groundCheck");
+		// groundCheck = transform.Find("groundCheck");
 		anim = GetComponent<Animator>();
-	}
+
+        rigidbody = GetComponent<Rigidbody2D>();
+    }
 
 
-	void Update()
+    void Update()
 	{
-		// The player is grounded if a linecast to the groundcheck position hits anything on the ground layer.
-		grounded = Physics2D.Linecast(transform.position, groundCheck.position, 1 << LayerMask.NameToLayer("Ground"));  
+        var velocity = rigidbody.velocity;
+        if (velocity.magnitude > 0.1f)
+            lastActiveVelocity = velocity;
+
+        // The player is grounded if a linecast to the groundcheck position hits anything on the ground layer.
+        // grounded = Physics2D.Linecast(transform.position, groundCheck.position, 1 << LayerMask.NameToLayer("Ground"));  
 
 		// If the jump button is pressed and the player is grounded then the player should jump.
 		if(Input.GetButtonDown("Jump") && grounded)
 			jump = true;
-	}
+
+        if (Input.GetButtonDown("Fire1"))
+        {
+            parasite.ReleaseControl(this, transform.position, lastActiveVelocity.normalized, launchForce);
+        }
+    }
 
 
 	void FixedUpdate ()
@@ -150,5 +165,15 @@ public class MouseControl : MonoBehaviour, IHost
 
         parasite.GetComponent<PlayerHealth>().decay = false;
         parasite.GetComponent<PlayerHealth>().health = parasite.GetComponent<PlayerHealth>().maxHealth;
+    }
+
+    void OnTriggerStay2D(Collider2D other)
+    {
+        grounded = true;
+    }
+
+    void OnTriggerExit2D(Collider2D other)
+    {
+        grounded = false;
     }
 }

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class PlayerHealth : MonoBehaviour
 {
@@ -18,9 +19,13 @@ public class PlayerHealth : MonoBehaviour
 	private float lastHitTime;					// The time at which the player was last hit.
 	private Vector3 healthScale;				// The local scale of the health bar initially (with full health).
 	private PlayerControl playerControl;		// Reference to the PlayerControl script.
-	private Animator anim;						// Reference to the Animator on the player
+	private Animator anim;	                    // Reference to the Animator on the player
+
     Vector2 lastActiveVelocity;
     Rigidbody2D rigidbody;
+
+    public GameObject splash;
+    public bool isDead = false;
 
 	void Awake ()
 	{
@@ -47,15 +52,27 @@ public class PlayerHealth : MonoBehaviour
         if (decay)
             health -= Time.deltaTime * decayRate;
 
-        if (health <= 0)
+        if (health <= 0 && !isDead)
         {
             anim.SetTrigger("Die");
             var host = GetComponent<IHost>();
+
+
             if (host != null)
             {
                 host.parasite.ReleaseControl(host, transform.position, lastActiveVelocity.normalized, host.launchForce);
                 Destroy(gameObject);
             }
+            else
+            {
+                Instantiate(splash, transform.position, transform.rotation);
+                Debug.Log("END");
+                StartCoroutine("ReloadGame", 2f);
+            }
+
+
+            isDead = true;
+
         }
         health = Mathf.Max(health, 0f);
         UpdateHealthBar();
@@ -101,6 +118,7 @@ public class PlayerHealth : MonoBehaviour
 
 					// ... Trigger the 'Die' animation state
 					anim.SetTrigger("Die");
+
 				}
 			}
 		}
@@ -140,4 +158,12 @@ public class PlayerHealth : MonoBehaviour
 		// Set the scale of the health bar to be proportional to the player's health.
 		healthBar.transform.localScale = new Vector3(percentHealth * healthScale.x, 1, 1);
 	}
+
+    IEnumerator ReloadGame()
+    {
+        // ... pause briefly
+        yield return new WaitForSeconds(2);
+        // ... and then reload the level.
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex, LoadSceneMode.Single);
+    }
 }
