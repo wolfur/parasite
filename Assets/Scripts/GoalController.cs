@@ -15,7 +15,7 @@ public class GoalController : MonoBehaviour
             //Open Win Menu
             Invoke("ActiveWinUI", .5f);
             //Stop controller input
-            Destroy(collision.gameObject, .6f);
+            Destroy(collision.gameObject, .5f);
 
         }
     }

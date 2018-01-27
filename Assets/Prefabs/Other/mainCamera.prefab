@@ -98,8 +98,8 @@ MonoBehaviour:
   yMargin: 2
   xSmooth: 2
   ySmooth: 2
-  maxXAndY: {x: 5, y: 5}
-  minXAndY: {x: -5, y: -5}
+  maxXAndY: {x: 10000, y: 10000}
+  minXAndY: {x: -10000, y: -10000}
   player: {fileID: 0}
 --- !u!124 &12400000
 Behaviour:

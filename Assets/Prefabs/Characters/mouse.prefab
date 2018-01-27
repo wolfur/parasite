@@ -331,7 +331,7 @@ MonoBehaviour:
   maxSpeed: 10
   jumpClips:
   - {fileID: 8300000, guid: 50a8d8a939a0f4e77a0dac6ecd2e582b, type: 3}
-  jumpForce: 1000
+  jumpForce: 0
   taunts: []
   tauntProbability: 50
   tauntDelay: 1
