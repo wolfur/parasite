@@ -147,5 +147,8 @@ public class MouseControl : MonoBehaviour, IHost
     {
         this.parasite = parasite;
         enabled = true;
+
+        parasite.GetComponent<PlayerHealth>().decay = false;
+        parasite.GetComponent<PlayerHealth>().health = parasite.GetComponent<PlayerHealth>().maxHealth;
     }
 }
