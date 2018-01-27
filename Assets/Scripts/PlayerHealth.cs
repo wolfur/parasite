@@ -2,10 +2,13 @@
 using System.Collections;
 
 public class PlayerHealth : MonoBehaviour
-{	
+{
+    public float maxHealth = 100f;
 	public float health = 100f;					// The player's health.
+
     public bool decay;
     public float decayRate = 33f;               // health / sec
+
 	public float repeatDamagePeriod = 2f;		// How frequently the player can be damaged.
 	public AudioClip[] ouchClips;				// Array of clips to play when the player is damaged.
 	public float hurtForce = 10f;				// The force with which the player is pushed when hurt.
@@ -27,8 +30,12 @@ public class PlayerHealth : MonoBehaviour
 		anim = GetComponent<Animator>();
 	    rigidbody = GetComponent<Rigidbody2D>();
 
+        health = maxHealth;
+
 		// Getting the intial scale of the healthbar (whilst the player has full health).
 		healthScale = healthBar.transform.localScale;
+
+
 	}
 
     void Update()
@@ -128,7 +135,9 @@ public class PlayerHealth : MonoBehaviour
 		// Set the health bar's colour to proportion of the way between green and red based on the player's health.
 		healthBar.material.color = Color.Lerp(Color.green, Color.red, 1 - health * 0.01f);
 
+        float percentHealth = health / maxHealth;
+
 		// Set the scale of the health bar to be proportional to the player's health.
-		healthBar.transform.localScale = new Vector3(healthScale.x * health * 0.01f, 1, 1);
+		healthBar.transform.localScale = new Vector3(percentHealth * healthScale.x, 1, 1);
 	}
 }

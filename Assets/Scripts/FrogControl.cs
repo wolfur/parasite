@@ -85,7 +85,7 @@ public class FrogControl : MonoBehaviour, IHost
 			int i = Random.Range(0, jumpClips.Length);
 			AudioSource.PlayClipAtPoint(jumpClips[i], transform.position);
 
-			// Add a vertical force to the player.
+            // Add a vertical force to the player
 			GetComponent<Rigidbody2D>().AddForce(new Vector2(0f, jumpForce));
 
 			// Make sure the player can't jump again until the jump conditions from Update are satisfied.
@@ -146,6 +146,11 @@ public class FrogControl : MonoBehaviour, IHost
     public void TakeControl(ParasiteControl parasite)
     {
         this.parasite = parasite;
+
+        //Stop the parasite decay
+        parasite.GetComponent<PlayerHealth>().decay = false;
+        parasite.GetComponent<PlayerHealth>().health = parasite.GetComponent<PlayerHealth>().maxHealth;
+
         enabled = true;
     }
 }

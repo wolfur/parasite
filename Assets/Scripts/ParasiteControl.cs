@@ -44,6 +44,12 @@ public class ParasiteControl : MonoBehaviour
 		// The player is grounded if a linecast to the groundcheck position hits anything on the ground layer.
 		grounded = Physics2D.Linecast(transform.position, groundCheck.position, 1 << LayerMask.NameToLayer("Ground"));  
 
+        //Once the parasite hits the ground the decay starts
+        if (this.GetComponent<PlayerHealth>().decay == false && grounded)
+        {
+            this.GetComponent<PlayerHealth>().decay = true;
+        }
+
 		// If the jump button is pressed and the player is grounded then the player should jump.
 		if(Input.GetButtonDown("Jump") && grounded)
 			jump = true;
