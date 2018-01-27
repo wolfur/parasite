@@ -19,7 +19,7 @@ public class FrogControl : MonoBehaviour, IHost
 
 
 	private int tauntIndex;					// The index of the taunts array indicating the most recent taunt.
-	private Transform groundCheck;			// A position marking where to check if the player is grounded.
+	// private Transform groundCheck;			// A position marking where to check if the player is grounded.
 	private bool grounded = false;			// Whether or not the player is grounded.
 	private Animator anim;                  // Reference to the player's animator component.
 
@@ -36,7 +36,7 @@ public class FrogControl : MonoBehaviour, IHost
     void Awake()
 	{
 		// Setting up references.
-		groundCheck = transform.Find("groundCheck");
+		// groundCheck = transform.Find("groundCheck");
 		anim = GetComponent<Animator>();
 
         rigidbody = GetComponent<Rigidbody2D>();
@@ -51,7 +51,7 @@ public class FrogControl : MonoBehaviour, IHost
             lastActiveVelocity = velocity;
 
         // The player is grounded if a linecast to the groundcheck position hits anything on the ground layer.
-        grounded = Physics2D.Linecast(transform.position, groundCheck.position, 1 << LayerMask.NameToLayer("Ground"));  
+        // grounded = Physics2D.Linecast(transform.position, groundCheck.position, 1 << LayerMask.NameToLayer("Ground"));  
 
 		// If the jump button is pressed and the player is grounded then the player should jump.
 		if(Input.GetButtonDown("Jump") && grounded)
@@ -170,5 +170,15 @@ public class FrogControl : MonoBehaviour, IHost
         parasite.GetComponent<PlayerHealth>().health = parasite.GetComponent<PlayerHealth>().maxHealth;
 
         enabled = true;
+    }
+
+    void OnTriggerStay2D(Collider2D other)
+    {
+        grounded = true;
+    }
+
+    void OnTriggerExit2D(Collider2D other)
+    {
+        grounded = false;
     }
 }
