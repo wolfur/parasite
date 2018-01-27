@@ -25,6 +25,10 @@ public class MouseControl : MonoBehaviour, IHost
 
     public ParasiteControl parasite { get; set; }
 
+    //ZZZZZZZZ
+    Vector2 lastActiveVelocity;
+    Rigidbody2D rigidbody;
+
     public float launchForce { get { return m_LaunchForce; } }
     [SerializeField]
     float m_LaunchForce = 1000f;
@@ -34,18 +38,29 @@ public class MouseControl : MonoBehaviour, IHost
 		// Setting up references.
 		groundCheck = transform.Find("groundCheck");
 		anim = GetComponent<Animator>();
-	}
+
+        rigidbody = GetComponent<Rigidbody2D>();
+    }
 
 
-	void Update()
+    void Update()
 	{
-		// The player is grounded if a linecast to the groundcheck position hits anything on the ground layer.
-		grounded = Physics2D.Linecast(transform.position, groundCheck.position, 1 << LayerMask.NameToLayer("Ground"));  
+        var velocity = rigidbody.velocity;
+        if (velocity.magnitude > 0.1f)
+            lastActiveVelocity = velocity;
+
+        // The player is grounded if a linecast to the groundcheck position hits anything on the ground layer.
+        grounded = Physics2D.Linecast(transform.position, groundCheck.position, 1 << LayerMask.NameToLayer("Ground"));  
 
 		// If the jump button is pressed and the player is grounded then the player should jump.
 		if(Input.GetButtonDown("Jump") && grounded)
 			jump = true;
-	}
+
+        if (Input.GetButtonDown("Fire1"))
+        {
+            parasite.ReleaseControl(this, transform.position, lastActiveVelocity.normalized, launchForce);
+        }
+    }
 
 
 	void FixedUpdate ()

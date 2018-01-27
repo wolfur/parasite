@@ -23,11 +23,11 @@ public class FrogControl : MonoBehaviour, IHost
 	private bool grounded = false;			// Whether or not the player is grounded.
 	private Animator anim;                  // Reference to the player's animator component.
 
+    public ParasiteControl parasite { get; set; }
+
     //ZZZZZZZZ
     Vector2 lastActiveVelocity;
     Rigidbody2D rigidbody;
-
-    public ParasiteControl parasite { get; set; }
 
     public float launchForce { get { return m_LaunchForce; } }
     [SerializeField]
