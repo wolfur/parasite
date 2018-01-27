@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class PlayerHealth : MonoBehaviour
 {
@@ -65,11 +66,13 @@ public class PlayerHealth : MonoBehaviour
             else
             {
                 Instantiate(splash, transform.position, transform.rotation);
+                Debug.Log("END");
+                StartCoroutine("ReloadGame", 2f);
             }
 
 
             isDead = true;
-            Debug.Log("END");
+
         }
         health = Mathf.Max(health, 0f);
         UpdateHealthBar();
@@ -155,4 +158,12 @@ public class PlayerHealth : MonoBehaviour
 		// Set the scale of the health bar to be proportional to the player's health.
 		healthBar.transform.localScale = new Vector3(percentHealth * healthScale.x, 1, 1);
 	}
+
+    IEnumerator ReloadGame()
+    {
+        // ... pause briefly
+        yield return new WaitForSeconds(2);
+        // ... and then reload the level.
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex, LoadSceneMode.Single);
+    }
 }
