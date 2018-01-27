@@ -19,15 +19,15 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4967797801840434}
-  - component: {fileID: 114013413717576746}
   - component: {fileID: 50931024972100384}
+  - component: {fileID: 114504621339474214}
   - component: {fileID: 61268653441553344}
   - component: {fileID: 58547844800293148}
   - component: {fileID: 95991994030087114}
   - component: {fileID: 114688899678681130}
   - component: {fileID: 82021913635584530}
   m_Layer: 9
-  m_Name: frog
+  m_Name: mouse
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -98,7 +98,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1015983831011696}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -12.42, y: 3.0568914, z: -1}
+  m_LocalPosition: {x: -14.6, y: 3.22, z: -1}
   m_LocalScale: {x: 1.2, y: 1.2, z: 1.2}
   m_Children:
   - {fileID: 4720050691050376}
@@ -185,7 +185,7 @@ AudioSource:
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 1
-  MinDistance: 1
+  MinDistance: 1.0992451
   MaxDistance: 500
   Pan2D: 0
   rolloffMode: 0
@@ -343,7 +343,7 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
---- !u!114 &114013413717576746
+--- !u!114 &114504621339474214
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -351,27 +351,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 1015983831011696}
   m_Enabled: 0
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f1b9d4ee041c0914684c3e9479f346fb, type: 3}
+  m_Script: {fileID: 11500000, guid: 5136e4dba9e4a8742848dd60fccc2231, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   facingRight: 1
   jump: 0
-  moveForce: 75
-  maxSpeed: 3
+  moveForce: 500
+  maxSpeed: 10
   jumpClips:
   - {fileID: 8300000, guid: 50a8d8a939a0f4e77a0dac6ecd2e582b, type: 3}
-  - {fileID: 8300000, guid: fc55d077383484ac0ad66aa17fcd746f, type: 3}
-  - {fileID: 8300000, guid: dafa1cc4eb8714341a7c595abfba35d8, type: 3}
-  jumpForce: 1250
-  taunts:
-  - {fileID: 8300000, guid: 27cbebf9d650249e5b032494eae5322c, type: 3}
-  - {fileID: 8300000, guid: 986fa1b8984964da79d1be0597332fb2, type: 3}
-  - {fileID: 8300000, guid: 18cb2f6181960417299fa419548cade6, type: 3}
-  - {fileID: 8300000, guid: 0c92f302b5186464187ab9b6adcd1282, type: 3}
-  - {fileID: 8300000, guid: 57d899f9f78ef4493b0b79dbc9d55e40, type: 3}
-  - {fileID: 8300000, guid: 0695e43dc27f94eecbf41013ef61b603, type: 3}
-  - {fileID: 8300000, guid: f00d6706bf8224fe39835855574f94c7, type: 3}
-  - {fileID: 8300000, guid: ddd0ca15e5d0a42b98f08337c1690bb1, type: 3}
+  jumpForce: 0
+  taunts: []
   tauntProbability: 50
   tauntDelay: 1
   m_LaunchForce: 1000
@@ -432,7 +422,7 @@ SpriteRenderer:
   m_SortingLayer: 3
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300004, guid: e7d3a1e0e2fac4bd48b6734c2daf4fe1, type: 3}
-  m_Color: {r: 0, g: 1, b: 0.2965517, a: 1}
+  m_Color: {r: 1, g: 0.10344829, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
