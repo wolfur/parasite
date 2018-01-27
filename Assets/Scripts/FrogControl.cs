@@ -25,7 +25,11 @@ public class FrogControl : MonoBehaviour, IHost
 
     public ParasiteControl parasite { get; set; }
 
-	void Awake()
+    public float launchForce { get { return m_LaunchForce; } }
+    [SerializeField]
+    float m_LaunchForce = 1000f;
+
+    void Awake()
 	{
 		// Setting up references.
 		groundCheck = transform.Find("groundCheck");

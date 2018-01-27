@@ -24,6 +24,7 @@ public class ParasiteControl : MonoBehaviour
 	private Animator anim;					// Reference to the player's animator component.
     FollowPlayer healthFollowPlayer;
     CameraFollow cameraFollow;
+    Rigidbody2D rigidbody;
 
 	void Awake()
 	{
@@ -32,6 +33,7 @@ public class ParasiteControl : MonoBehaviour
 		anim = GetComponent<Animator>();
         healthFollowPlayer = GameObject.FindObjectOfType<FollowPlayer>();
 	    cameraFollow = FindObjectOfType<CameraFollow>();
+	    rigidbody = GetComponent<Rigidbody2D>();
 	}
 
 
@@ -66,7 +68,7 @@ public class ParasiteControl : MonoBehaviour
         }
     }
 
-    public void ReleaseControl(IHost host, Vector3 releasePoint)
+    public void ReleaseControl(IHost host, Vector3 releasePoint, Vector2? launchDirection = null, float launchForce = 0f)
     {
         var hostControl = ((MonoBehaviour)host);
         hostControl.enabled = false;
@@ -77,9 +79,19 @@ public class ParasiteControl : MonoBehaviour
         cameraFollow.player = transform;
 
         transform.position = releasePoint;
+        gameObject.SetActive(true);
+        if (launchDirection.HasValue)
+        {
+            var finalLaunchDirection = launchDirection.Value;
+            if (Mathf.Abs(Vector2.Dot(finalLaunchDirection, Vector2.right)) >= 0.9)
+            {
+                finalLaunchDirection += Vector2.up;
+                finalLaunchDirection.Normalize();
+            }
+            rigidbody.AddForce(finalLaunchDirection * launchForce);
+        }
         var parasiteHealth = GetComponent<PlayerHealth>();
         parasiteHealth.enabled = true;
-        gameObject.SetActive(true);
     }
 
 	void FixedUpdate ()
@@ -90,17 +102,18 @@ public class ParasiteControl : MonoBehaviour
 		// The Speed animator parameter is set to the absolute value of the horizontal input.
 		anim.SetFloat("Speed", Mathf.Abs(h));
 
-		// If the player is changing direction (h has a different sign to velocity.x) or hasn't reached maxSpeed yet...
-		if(h * GetComponent<Rigidbody2D>().velocity.x < maxSpeed)
-			// ... add a force to the player.
-			GetComponent<Rigidbody2D>().AddForce(Vector2.right * h * moveForce);
+	    if (grounded)
+	    {
+	        // If the player is changing direction (h has a different sign to velocity.x) or hasn't reached maxSpeed yet...
+	        if (h * rigidbody.velocity.x < maxSpeed)
+	            rigidbody.AddForce(Vector2.right * h * moveForce);
 
-		// If the player's horizontal velocity is greater than the maxSpeed...
-		if(Mathf.Abs(GetComponent<Rigidbody2D>().velocity.x) > maxSpeed)
-			// ... set the player's velocity to the maxSpeed in the x axis.
-			GetComponent<Rigidbody2D>().velocity = new Vector2(Mathf.Sign(GetComponent<Rigidbody2D>().velocity.x) * maxSpeed, GetComponent<Rigidbody2D>().velocity.y);
+	        // If the player's horizontal velocity is greater than the maxSpeed...
+	        if (Mathf.Abs(rigidbody.velocity.x) > maxSpeed)
+	            rigidbody.velocity = new Vector2(Mathf.Sign(rigidbody.velocity.x) * maxSpeed, rigidbody.velocity.y);
+	    }
 
-		// If the input is moving the player right and the player is facing left...
+	    // If the input is moving the player right and the player is facing left...
 		if(h > 0 && !facingRight)
 			// ... flip the player.
 			Flip();
@@ -120,7 +133,7 @@ public class ParasiteControl : MonoBehaviour
 			AudioSource.PlayClipAtPoint(jumpClips[i], transform.position);
 
 			// Add a vertical force to the player.
-			GetComponent<Rigidbody2D>().AddForce(new Vector2(0f, jumpForce));
+			rigidbody.AddForce(new Vector2(0f, jumpForce));
 
 			// Make sure the player can't jump again until the jump conditions from Update are satisfied.
 			jump = false;

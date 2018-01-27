@@ -16,7 +16,8 @@ public class PlayerHealth : MonoBehaviour
 	private Vector3 healthScale;				// The local scale of the health bar initially (with full health).
 	private PlayerControl playerControl;		// Reference to the PlayerControl script.
 	private Animator anim;						// Reference to the Animator on the player
-
+    Vector2 lastActiveVelocity;
+    Rigidbody2D rigidbody;
 
 	void Awake ()
 	{
@@ -24,6 +25,7 @@ public class PlayerHealth : MonoBehaviour
 		playerControl = GetComponent<PlayerControl>();
 		healthBar = GameObject.Find("HealthBar").GetComponent<SpriteRenderer>();
 		anim = GetComponent<Animator>();
+	    rigidbody = GetComponent<Rigidbody2D>();
 
 		// Getting the intial scale of the healthbar (whilst the player has full health).
 		healthScale = healthBar.transform.localScale;
@@ -31,6 +33,10 @@ public class PlayerHealth : MonoBehaviour
 
     void Update()
     {
+        var velocity = rigidbody.velocity;
+        if (velocity.magnitude > 0.1f)
+            lastActiveVelocity = velocity;
+
         if (decay)
             health -= Time.deltaTime * decayRate;
 
@@ -40,7 +46,7 @@ public class PlayerHealth : MonoBehaviour
             var host = GetComponent<IHost>();
             if (host != null)
             {
-                host.parasite.ReleaseControl(host, transform.position);
+                host.parasite.ReleaseControl(host, transform.position, lastActiveVelocity.normalized, host.launchForce);
                 Destroy(gameObject);
             }
         }

@@ -355,6 +355,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 100
+  decay: 0
   decayRate: 33
   repeatDamagePeriod: 0.35
   ouchClips:
